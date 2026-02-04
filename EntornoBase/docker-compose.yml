@@ -1,0 +1,41 @@
+services:
+  # Servidor Web con PHP
+  web:
+    build: .
+    container_name: vichoxphpserver
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+
+  # Base de Datos
+  db:
+    image: mariadb:latest
+    container_name: vichoxdata
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'L3Ñ4&T!n0'
+      MYSQL_DATABASE: vichoxdatabase
+      MYSQL_USER: vichoxusr
+      MYSQL_PASSWORD: 'L3Ñ4&T!n0usr'
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # Interfaz Visual (phpMyAdmin)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: vichoxadmindb
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_ARBITRARY: 1
+    depends_on:
+      - db
+
+volumes:
+  db_data:
